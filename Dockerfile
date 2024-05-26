@@ -27,6 +27,15 @@ RUN apk add --no-cache -t .build \
     && pip3 install --no-cache-dir \
         netifaces \
     && apk del .build
+# Install dependencies and pgvector extension
+RUN apk add --no-cache git build-base postgresql-dev && \
+    git clone https://github.com/pgvector/pgvector.git && \
+    cd pgvector && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf pgvector && \
+    apk del git build-base postgresql-dev
 COPY autoconf-entrypoint /
 
 # Metadata
